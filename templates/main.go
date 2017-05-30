@@ -34,7 +34,7 @@ func main() {
 		},
 	}
 
-	err := tpl.Execute(os.Stdout, people)
+	err := tpl.ExecuteTemplate(os.Stdout, "main.gohtml", people)
 	if err != nil {
 		log.Fatalln(err)
 	}
