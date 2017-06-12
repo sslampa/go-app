@@ -1,18 +1,22 @@
 package main
 
 import (
+	"flag"
 	"html/template"
 	"log"
 	"net/http"
 )
 
 func main() {
-	port := ":8000"
+	port := flag.String("p", "8080", "port to serve on")
+	flag.Parse()
+
 	http.HandleFunc("/", sendIndex)
 	http.HandleFunc("/user", sendUser)
+	http.Handle("/stylesheets/", http.StripPrefix("/stylesheets/", http.FileServer(http.Dir("stylesheets"))))
 
-	log.Printf("Serving on HTTP port: %s\n", port)
-	err := http.ListenAndServe(port, nil)
+	log.Printf("Serving on HTTP port: %s\n", *port)
+	err := http.ListenAndServe(":"+*port, nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
