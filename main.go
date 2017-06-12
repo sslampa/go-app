@@ -1,30 +1,38 @@
 package main
 
 import (
-	"fmt"
+	"html/template"
 	"log"
 	"net/http"
-	"strings"
 )
-
-func sendData(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-	fmt.Println(r.Form)
-	fmt.Println("path", r.URL.Path)
-	fmt.Println("scheme", r.URL.Scheme)
-	fmt.Println(r.Form["url_long"])
-	for k, v := range r.Form {
-		fmt.Println("key:", k)
-		fmt.Println("val:", strings.Join(v, ""))
-	}
-	fmt.Fprintf(w, "Hello world! This changes something.")
-}
 
 func main() {
 	port := ":8000"
-	http.HandleFunc("/", sendData)
+	http.HandleFunc("/", sendIndex)
+	http.HandleFunc("/user", sendUser)
+
+	log.Printf("Serving on HTTP port: %s\n", port)
 	err := http.ListenAndServe(port, nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
+	}
+
+}
+
+func sendIndex(w http.ResponseWriter, r *http.Request) {
+	tpl := template.Must(template.ParseGlob("./templates/*.gohtml"))
+
+	err := tpl.ExecuteTemplate(w, "index.gohtml", nil)
+	if err != nil {
+		log.Fatalln(err)
+	}
+}
+
+func sendUser(w http.ResponseWriter, r *http.Request) {
+	tpl := template.Must(template.ParseGlob("./templates/*.gohtml"))
+
+	err := tpl.ExecuteTemplate(w, "user.gohtml", nil)
+	if err != nil {
+		log.Fatalln(err)
 	}
 }
