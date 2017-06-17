@@ -5,6 +5,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+
+	_ "github.com/sslampa/go-app/models"
 )
 
 func main() {
@@ -17,9 +19,9 @@ func main() {
 	http.HandleFunc("/login", sendLogin)
 	http.Handle("/stylesheets/", http.StripPrefix("/stylesheets/", http.FileServer(http.Dir("stylesheets"))))
 
-	err := http.ListenAndServe(":"+*port, nil)
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
+	merr := http.ListenAndServe(":"+*port, nil)
+	if merr != nil {
+		log.Fatal("ListenAndServe: ", merr)
 	}
 
 }
