@@ -17,6 +17,7 @@ func main() {
 	http.HandleFunc("/", sendIndex)
 	http.HandleFunc("/user", sendUser)
 	http.HandleFunc("/login", sendLogin)
+	http.HandleFunc("/signup", sendSignup)
 	http.Handle("/stylesheets/", http.StripPrefix("/stylesheets/", http.FileServer(http.Dir("stylesheets"))))
 
 	merr := http.ListenAndServe(":"+*port, nil)
@@ -48,6 +49,15 @@ func sendLogin(w http.ResponseWriter, r *http.Request) {
 	tpl := template.Must(template.ParseGlob("./templates/*.gohtml"))
 
 	err := tpl.ExecuteTemplate(w, "login.gohtml", nil)
+	if err != nil {
+		log.Fatalln(err)
+	}
+}
+
+func sendSignup(w http.ResponseWriter, r *http.Request) {
+	tpl := template.Must(template.ParseGlob("./templates/*.gohtml"))
+
+	err := tpl.ExecuteTemplate(w, "signup.gohtml", nil)
 	if err != nil {
 		log.Fatalln(err)
 	}
