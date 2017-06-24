@@ -6,13 +6,27 @@ import (
 	"log"
 	"net/http"
 
-	_ "github.com/sslampa/go-app/models"
+	"github.com/kelseyhightower/envconfig"
+	"github.com/sslampa/go-app/models"
 )
+
+type Specification struct {
+	User string
+	Pass string
+}
 
 func main() {
 	port := flag.String("p", "8080", "port to serve on")
 	flag.Parse()
 	log.Printf("Serving on HTTP port: %s\n", *port)
+
+	var s Specification
+	err := envconfig.Process("db", &s)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	models.Init(s.User, s.Pass)
 
 	http.HandleFunc("/", sendIndex)
 	http.HandleFunc("/user", sendUser)
@@ -20,9 +34,9 @@ func main() {
 	http.HandleFunc("/signup", sendSignup)
 	http.Handle("/stylesheets/", http.StripPrefix("/stylesheets/", http.FileServer(http.Dir("stylesheets"))))
 
-	merr := http.ListenAndServe(":"+*port, nil)
-	if merr != nil {
-		log.Fatal("ListenAndServe: ", merr)
+	err = http.ListenAndServe(":"+*port, nil)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
 	}
 
 }
