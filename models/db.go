@@ -15,6 +15,7 @@ func Init(user, pass string) {
 	if err != nil {
 		panic(err)
 	}
+	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
@@ -22,4 +23,5 @@ func Init(user, pass string) {
 	}
 
 	fmt.Println("You connected to your database")
+	InitUsers(db)
 }
