@@ -3,22 +3,35 @@ package models
 import (
 	"database/sql"
 	"fmt"
+	"log"
 
+	"github.com/kelseyhightower/envconfig"
 	_ "github.com/lib/pq"
 )
 
-var db *sql.DB
+var DB *sql.DB
 
-func Init(user, pass string) {
-	dbInfo := fmt.Sprintf("user=%s password=%s dbname=go_app", user, pass)
-	db, err := sql.Open("postgres", dbInfo)
+type Specification struct {
+	User string
+	Pass string
+}
+
+func init() {
+	fmt.Println("Here")
+	var s Specification
+	err := envconfig.Process("db", &s)
 	if err != nil {
-		panic(err)
+		log.Fatal(err.Error())
 	}
 
-	err = db.Ping()
+	dbInfo := fmt.Sprintf("user=%s password=%s dbname=go_app", s.User, s.Pass)
+	DB, err = sql.Open("postgres", dbInfo)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
+	}
+
+	if err = DB.Ping(); err != nil {
+		log.Fatal(err)
 	}
 
 	fmt.Println("You connected to your database")
