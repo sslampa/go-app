@@ -6,39 +6,25 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/kelseyhightower/envconfig"
 	"github.com/sslampa/go-app/models"
 )
-
-type Specification struct {
-	User string
-	Pass string
-}
 
 func main() {
 	port := flag.String("p", "8080", "port to serve on")
 	flag.Parse()
 	log.Printf("Serving on HTTP port: %s\n", *port)
 
-	var s Specification
-	err := envconfig.Process("db", &s)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-
-	models.Init(s.User, s.Pass)
-
 	http.HandleFunc("/", sendIndex)
 	http.HandleFunc("/user", sendUser)
+	http.HandleFunc("/users", sendUsers)
 	http.HandleFunc("/login", sendLogin)
 	http.HandleFunc("/signup", sendSignup)
 	http.Handle("/stylesheets/", http.StripPrefix("/stylesheets/", http.FileServer(http.Dir("stylesheets"))))
 
-	err = http.ListenAndServe(":"+*port, nil)
+	err := http.ListenAndServe(":"+*port, nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
-
 }
 
 func sendIndex(w http.ResponseWriter, r *http.Request) {
@@ -56,6 +42,20 @@ func sendUser(w http.ResponseWriter, r *http.Request) {
 	err := tpl.ExecuteTemplate(w, "user.gohtml", nil)
 	if err != nil {
 		log.Fatalln(err)
+	}
+}
+
+func sendUsers(w http.ResponseWriter, r *http.Request) {
+	users, err := models.AllUsers()
+	if err != nil {
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+		return
+	}
+	tpl := template.Must(template.ParseGlob("./templates/*.gohtml"))
+
+	err = tpl.ExecuteTemplate(w, "users.gohtml", users)
+	if err != nil {
+		log.Fatal(err)
 	}
 }
 
