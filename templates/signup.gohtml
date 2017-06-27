@@ -7,10 +7,12 @@
   </head>
   <body>
     {{template "navbar"}}
-      <form action="signup">
+      <form method="POST" action="/signup/create">
         <input type="text" name="username" placeholder="Username">
-        <input type="text" name="password-first" placeholder="Password">
+        <input type="text" name="password" placeholder="Password">
         <input type="text" name="password-confirm" placeholder="Confirm Password">
+        <input type="text" name="first-name" placeholder="First Name">
+        <input type="text" name="last-name" placeholder="Last Name">
         <input type="submit" value="Sign Up">
       </form>
     {{template "footer"}}

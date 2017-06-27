@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/sslampa/go-app/handlers"
 	"github.com/sslampa/go-app/models"
 )
 
@@ -22,6 +23,7 @@ func main() {
 	http.HandleFunc("/user", sendUser)
 	http.HandleFunc("/users", sendUsers)
 	http.HandleFunc("/login", sendLogin)
+	http.HandleFunc("/signup/create", handlers.SignupHandler)
 	http.HandleFunc("/signup", sendSignup)
 	http.Handle("/stylesheets/", http.StripPrefix("/stylesheets/", http.FileServer(http.Dir("stylesheets"))))
 
