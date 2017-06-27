@@ -18,10 +18,10 @@ type User struct {
 func InitUsers() {
 	tableQuery := `CREATE TABLE IF NOT EXISTS users (
 		id SERIAL PRIMARY KEY,
-		username varchar,
-		password varchar,
-		first_name varchar,
-		last_name varchar)`
+		username VARCHAR UNIQUE ,
+		password VARCHAR,
+		first_name VARCHAR,
+		last_name VARCHAR)`
 
 	_, err := DB.Exec(tableQuery)
 	if err != nil {
@@ -37,7 +37,7 @@ func CreateUser(u *User) error {
 	}
 
 	userInsert := `INSERT INTO users (username, password, first_name, last_name)
-	VALUES ($1, $2, $3, $4)`
+		VALUES ($1, $2, $3, $4)`
 
 	_, err := DB.Exec(userInsert, u.Username, u.Password, u.FirstName, u.LastName)
 	if err != nil {
