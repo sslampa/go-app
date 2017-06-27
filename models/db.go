@@ -59,13 +59,13 @@ func Seed() {
 		FirstName: "Toma",
 		LastName:  "Nistor",
 	}
-	err = CreateUser(&user1)
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = CreateUser(&user2)
-	if err != nil {
-		log.Fatal(err)
-	}
+	_, _ = CreateUser(&user1)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	_, _ = CreateUser(&user2)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 	fmt.Println("Seed file ran")
 }

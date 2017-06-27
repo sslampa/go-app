@@ -30,21 +30,27 @@ func InitUsers() {
 }
 
 // CreateUser does stuff
-func CreateUser(u *User) error {
+func CreateUser(u *User) (User, error) {
 	user, _ := FindUser(u.Username, "username")
 	if user != (User{}) {
-		return fmt.Errorf("Username already exists")
+		return *u, fmt.Errorf("Username already exists")
 	}
 
-	userInsert := `INSERT INTO users (username, password, first_name, last_name)
-		VALUES ($1, $2, $3, $4)`
+	userInsert := "INSERT INTO users (username, password, first_name, last_name) VALUES ($1,$2,$3,$4)"
 
-	_, err := DB.Exec(userInsert, u.Username, u.Password, u.FirstName, u.LastName)
+	result, err := DB.Exec(userInsert, u.Username, u.Password, u.FirstName, u.LastName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	id, _ := result.LastInsertId()
+	strID := fmt.Sprintf("%v", id)
+
+	createdUser, err := FindUser(strID, "id")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return nil
+	return createdUser, nil
 }
 
 // FindUser finds stuff
@@ -52,16 +58,14 @@ func FindUser(value string, column string) (User, error) {
 	var userString string
 	switch column {
 	case "username":
-		userString = `SELECT * FROM users WHERE username = $1`
+		userString = "SELECT * FROM users WHERE username = $1"
 	case "id":
-		userString = `SELECT * FROM users WHERE id = $1`
+		userString = "SELECT * FROM users WHERE id = $1"
 	}
-
 	rows, err := DB.Query(userString, value)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer rows.Close()
 
 	user := User{}
 	for rows.Next() {
