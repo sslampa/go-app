@@ -11,7 +11,11 @@ import (
 
 func main() {
 	port := flag.String("p", "8080", "port to serve on")
+	seed := flag.Bool("s", false, "drop and add seed data")
 	flag.Parse()
+	if *seed {
+		models.Seed()
+	}
 	log.Printf("Serving on HTTP port: %s\n", *port)
 
 	http.HandleFunc("/", sendIndex)

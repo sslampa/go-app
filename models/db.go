@@ -38,3 +38,28 @@ func init() {
 	fmt.Println("You connected to your database")
 	InitUsers()
 }
+
+// Seed the db
+func Seed() {
+	dropQuery := `DROP TABLE users`
+	_, err := DB.Exec(dropQuery)
+	if err != nil {
+		log.Fatal(err)
+	}
+	InitUsers()
+	user1 := User{
+		Username:  "sslampa",
+		Password:  "123456",
+		FirstName: "Stephen",
+		LastName:  "Lampa",
+	}
+	user2 := User{
+		Username:  "tomanistor",
+		Password:  "123456",
+		FirstName: "Toma",
+		LastName:  "Nistor",
+	}
+	CreateUser(&user1)
+	CreateUser(&user2)
+	fmt.Println("Seed file ran")
+}
