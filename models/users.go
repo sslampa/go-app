@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-// User has things
+// User holds the values for a user of the site
 type User struct {
 	ID        int
 	Username  string
@@ -14,7 +14,7 @@ type User struct {
 	LastName  string
 }
 
-// InitUsers does stuff
+// InitUsers creates the Users table in the db
 func InitUsers() {
 	tableQuery := `CREATE TABLE IF NOT EXISTS users (
 		id SERIAL PRIMARY KEY,
@@ -29,7 +29,7 @@ func InitUsers() {
 	}
 }
 
-// CreateUser does stuff
+// CreateUser adds a user into the Users db
 func CreateUser(u *User) (User, error) {
 	user, _ := FindUser(u.Username, "username")
 	if user != (User{}) {
@@ -53,7 +53,7 @@ func CreateUser(u *User) (User, error) {
 	return createdUser, nil
 }
 
-// FindUser finds stuff
+// FindUser returns a single user found by either username or id
 func FindUser(value string, column string) (User, error) {
 	var userString string
 	switch column {
@@ -78,7 +78,7 @@ func FindUser(value string, column string) (User, error) {
 	return user, nil
 }
 
-// AllUsers does stuff
+// AllUsers returns all users
 func AllUsers() ([]User, error) {
 	rows, err := DB.Query("SELECT id, username, password, first_name, last_name FROM users")
 	if err != nil {

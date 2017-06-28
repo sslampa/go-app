@@ -9,7 +9,7 @@ import (
 	"github.com/sslampa/go-app/utility"
 )
 
-// SignupHandler does stuff
+// SignupHandler signs up a new user
 func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	u := models.User{}
 	u.Username = r.FormValue("username")
