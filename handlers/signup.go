@@ -19,6 +19,15 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	passwordConfirm := r.FormValue("password-confirm")
 
 	if u.Password != passwordConfirm {
+		flashMessage := "Passwords do not match"
+		utility.SetFlash(w, "flash", flashMessage, "/signup")
+		http.Redirect(w, r, "/signup", http.StatusSeeOther)
+		return
+	}
+
+	if models.CheckUsername(&u) {
+		flashMessage := "Username already exists"
+		utility.SetFlash(w, "flash", flashMessage, "/signup")
 		http.Redirect(w, r, "/signup", http.StatusSeeOther)
 		return
 	}

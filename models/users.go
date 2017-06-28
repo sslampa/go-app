@@ -31,11 +31,6 @@ func InitUsers() {
 
 // CreateUser adds a user into the Users db
 func CreateUser(u *User) (User, error) {
-	user, _ := FindUser(u.Username, "username")
-	if user != (User{}) {
-		return *u, fmt.Errorf("Username already exists")
-	}
-
 	userInsert := "INSERT INTO users (username, password, first_name, last_name) VALUES ($1,$2,$3,$4)"
 
 	result, err := DB.Exec(userInsert, u.Username, u.Password, u.FirstName, u.LastName)
@@ -99,4 +94,15 @@ func AllUsers() ([]User, error) {
 		return nil, err
 	}
 	return users, nil
+}
+
+// CheckUsername checks to see if there's a unique username
+func CheckUsername(u *User) bool {
+	user, _ := FindUser(u.Username, "username")
+
+	if user != (User{}) {
+		return true
+	}
+
+	return false
 }
