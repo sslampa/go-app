@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -27,6 +28,7 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	utility.SetFlash(w, "flash", "You signed up!", "/")
+	flashMessage := fmt.Sprintf("You signed up, %v!", u.Username)
+	utility.SetFlash(w, "flash", flashMessage, "/")
 	http.Redirect(w, r, "/", 301)
 }
