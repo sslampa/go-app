@@ -8,6 +8,7 @@ import (
 
 	"github.com/sslampa/go-app/handlers"
 	"github.com/sslampa/go-app/models"
+	"github.com/sslampa/go-app/utility"
 )
 
 func main() {
@@ -35,11 +36,13 @@ func main() {
 
 func sendIndex(w http.ResponseWriter, r *http.Request) {
 	tpl := template.Must(template.ParseGlob("./templates/*.gohtml"))
+	value := utility.GetFlash(w, r, "flash", "/")
 
-	err := tpl.ExecuteTemplate(w, "index.gohtml", nil)
+	err := tpl.ExecuteTemplate(w, "index.gohtml", value)
 	if err != nil {
 		log.Fatalln(err)
 	}
+
 }
 
 func sendUser(w http.ResponseWriter, r *http.Request) {
@@ -76,8 +79,9 @@ func sendLogin(w http.ResponseWriter, r *http.Request) {
 
 func sendSignup(w http.ResponseWriter, r *http.Request) {
 	tpl := template.Must(template.ParseGlob("./templates/*.gohtml"))
+	value := utility.GetFlash(w, r, "flash", "/signup")
 
-	err := tpl.ExecuteTemplate(w, "signup.gohtml", nil)
+	err := tpl.ExecuteTemplate(w, "signup.gohtml", value)
 	if err != nil {
 		log.Fatalln(err)
 	}

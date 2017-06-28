@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/kelseyhightower/envconfig"
-	// Used to connect to server
+	// Connects to server
 	_ "github.com/lib/pq"
 )
 
@@ -60,12 +60,7 @@ func Seed() {
 		LastName:  "Nistor",
 	}
 	_, _ = CreateUser(&user1)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
 	_, _ = CreateUser(&user2)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+
 	fmt.Println("Seed file ran")
 }
