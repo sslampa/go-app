@@ -106,3 +106,12 @@ func CheckUsername(u *User) bool {
 
 	return false
 }
+
+// CheckPassword checks to see if the password is valid
+func CheckPassword(pw, pwConfirm string) bool {
+	if pw != pwConfirm || len(pw) < 6 {
+		return true
+	}
+
+	return false
+}

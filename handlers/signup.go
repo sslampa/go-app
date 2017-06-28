@@ -25,6 +25,13 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if len(u.Password) < 6 {
+		flashMessage := "Password is not 6 characters or more"
+		utility.SetFlash(w, "flash", flashMessage, "/signup")
+		http.Redirect(w, r, "/signup", http.StatusSeeOther)
+		return
+	}
+
 	if models.CheckUsername(&u) {
 		flashMessage := "Username already exists"
 		utility.SetFlash(w, "flash", flashMessage, "/signup")

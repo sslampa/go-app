@@ -36,7 +36,7 @@ func main() {
 
 func sendIndex(w http.ResponseWriter, r *http.Request) {
 	tpl := template.Must(template.ParseGlob("./templates/*.gohtml"))
-	value := utility.GetFlash(w, r, "flash")
+	value := utility.GetFlash(w, r, "flash", "/")
 
 	err := tpl.ExecuteTemplate(w, "index.gohtml", value)
 	if err != nil {
@@ -79,7 +79,7 @@ func sendLogin(w http.ResponseWriter, r *http.Request) {
 
 func sendSignup(w http.ResponseWriter, r *http.Request) {
 	tpl := template.Must(template.ParseGlob("./templates/*.gohtml"))
-	value := utility.GetFlash(w, r, "flash")
+	value := utility.GetFlash(w, r, "flash", "/signup")
 
 	err := tpl.ExecuteTemplate(w, "signup.gohtml", value)
 	if err != nil {
