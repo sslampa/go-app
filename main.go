@@ -35,11 +35,23 @@ func main() {
 
 func sendIndex(w http.ResponseWriter, r *http.Request) {
 	tpl := template.Must(template.ParseGlob("./templates/*.gohtml"))
+	c, err := r.Cookie("flash")
+	if err != nil {
+		err = tpl.ExecuteTemplate(w, "index.gohtml", nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return
+	}
+	value := c.Value
 
-	err := tpl.ExecuteTemplate(w, "index.gohtml", nil)
+	nc := &http.Cookie{Name: "flash", MaxAge: -1, Path: "/"}
+	http.SetCookie(w, nc)
+	err = tpl.ExecuteTemplate(w, "index.gohtml", value)
 	if err != nil {
 		log.Fatalln(err)
 	}
+
 }
 
 func sendUser(w http.ResponseWriter, r *http.Request) {

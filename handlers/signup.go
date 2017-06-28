@@ -26,5 +26,7 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	c := &http.Cookie{Name: "flash", Value: "You signed up!", Path: "/"}
+	http.SetCookie(w, c)
+	http.Redirect(w, r, "/", 301)
 }
