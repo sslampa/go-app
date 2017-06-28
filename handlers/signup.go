@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/sslampa/go-app/models"
+	"github.com/sslampa/go-app/utility"
 )
 
 // SignupHandler does stuff
@@ -26,7 +27,6 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	c := &http.Cookie{Name: "flash", Value: "You signed up!", Path: "/"}
-	http.SetCookie(w, c)
+	utility.SetFlash(w, "flash", "You signed up!", "/")
 	http.Redirect(w, r, "/", 301)
 }

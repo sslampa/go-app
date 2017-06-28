@@ -8,6 +8,7 @@ import (
 
 	"github.com/sslampa/go-app/handlers"
 	"github.com/sslampa/go-app/models"
+	"github.com/sslampa/go-app/utility"
 )
 
 func main() {
@@ -35,19 +36,9 @@ func main() {
 
 func sendIndex(w http.ResponseWriter, r *http.Request) {
 	tpl := template.Must(template.ParseGlob("./templates/*.gohtml"))
-	c, err := r.Cookie("flash")
-	if err != nil {
-		err = tpl.ExecuteTemplate(w, "index.gohtml", nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		return
-	}
-	value := c.Value
+	value := utility.GetFlash(w, r, "flash")
 
-	nc := &http.Cookie{Name: "flash", MaxAge: -1, Path: "/"}
-	http.SetCookie(w, nc)
-	err = tpl.ExecuteTemplate(w, "index.gohtml", value)
+	err := tpl.ExecuteTemplate(w, "index.gohtml", value)
 	if err != nil {
 		log.Fatalln(err)
 	}
