@@ -21,7 +21,6 @@ func main() {
 	log.Printf("Serving on HTTP port: %s\n", *port)
 
 	http.HandleFunc("/", sendIndex)
-	http.HandleFunc("/user", sendUser)
 	http.HandleFunc("/users", sendUsers)
 	http.HandleFunc("/login", sendLogin)
 	http.HandleFunc("/signup/create", handlers.SignupHandler)
@@ -46,24 +45,16 @@ func sendIndex(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func sendUser(w http.ResponseWriter, r *http.Request) {
-	tpl := template.Must(template.ParseGlob("./templates/*.gohtml"))
-
-	err := tpl.ExecuteTemplate(w, "user.gohtml", nil)
-	if err != nil {
-		log.Fatalln(err)
-	}
-}
-
 func sendUsers(w http.ResponseWriter, r *http.Request) {
 	users, err := models.AllUsers()
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
-	tpl := template.Must(template.ParseGlob("./templates/*.gohtml"))
+	tpl := makeTemplate()
+	tpl.ParseFiles("./templates/users.gohtml")
 
-	err = tpl.ExecuteTemplate(w, "users.gohtml", users)
+	err = tpl.ExecuteTemplate(w, "base.gohtml", users)
 	if err != nil {
 		log.Fatal(err)
 	}
