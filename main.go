@@ -7,7 +7,6 @@ import (
 
 	"github.com/sslampa/go-app/handlers"
 	"github.com/sslampa/go-app/models"
-	"github.com/sslampa/go-app/utility"
 )
 
 func main() {
@@ -19,7 +18,7 @@ func main() {
 	}
 	log.Printf("Serving on HTTP port: %s\n", *port)
 
-	http.HandleFunc("/", sendIndex)
+	http.HandleFunc("/", handlers.IndexHandler)
 	http.HandleFunc("/users", handlers.UsersHandler)
 	http.HandleFunc("/login", handlers.LoginHandler)
 	http.HandleFunc("/signup/create", handlers.CreateUserHandler)
@@ -29,16 +28,5 @@ func main() {
 	err := http.ListenAndServe(":"+*port, nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
-	}
-}
-
-func sendIndex(w http.ResponseWriter, r *http.Request) {
-	tpl := utility.MakeTemplate()
-	tpl.ParseFiles("./templates/index.gohtml")
-	value := utility.GetFlash(w, r, "flash", "/")
-
-	err := tpl.ExecuteTemplate(w, "base.gohtml", value)
-	if err != nil {
-		log.Fatalln(err)
 	}
 }
