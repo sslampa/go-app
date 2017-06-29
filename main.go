@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"html/template"
 	"log"
 	"net/http"
 
@@ -34,7 +33,7 @@ func main() {
 }
 
 func sendIndex(w http.ResponseWriter, r *http.Request) {
-	tpl := makeTemplate()
+	tpl := utility.MakeTemplate()
 	tpl.ParseFiles("./templates/index.gohtml")
 	value := utility.GetFlash(w, r, "flash", "/")
 
@@ -51,7 +50,7 @@ func sendUsers(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
-	tpl := makeTemplate()
+	tpl := utility.MakeTemplate()
 	tpl.ParseFiles("./templates/users.gohtml")
 
 	err = tpl.ExecuteTemplate(w, "base.gohtml", users)
@@ -61,17 +60,11 @@ func sendUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func sendLogin(w http.ResponseWriter, r *http.Request) {
-	tpl := makeTemplate()
+	tpl := utility.MakeTemplate()
 	tpl.ParseFiles("./templates/login.gohtml")
 
 	err := tpl.ExecuteTemplate(w, "base.gohtml", nil)
 	if err != nil {
 		log.Fatalln(err)
 	}
-}
-
-func makeTemplate() *template.Template {
-	tpl := template.Must(template.ParseFiles("./templates/base.gohtml",
-		"./templates/footer.gohtml", "./templates/navbar.gohtml"))
-	return tpl
 }

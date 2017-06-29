@@ -58,7 +58,8 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 
 // SignupHandler shows sign up page
 func SignupHandler(w http.ResponseWriter, r *http.Request) {
-	tpl := template.Must(template.ParseFiles("./templates/base.gohtml", "./templates/signup.gohtml", "./templates/navbar.gohtml", "./templates/footer.gohtml"))
+	tpl := utility.MakeTemplate()
+	tpl.ParseFiles("./templates/signup.gohtml")
 	value := utility.GetFlash(w, r, "flash", "/signup")
 
 	err := tpl.ExecuteTemplate(w, "base.gohtml", value)
