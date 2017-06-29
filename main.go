@@ -61,9 +61,10 @@ func sendUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func sendLogin(w http.ResponseWriter, r *http.Request) {
-	tpl := template.Must(template.ParseGlob("./templates/*.gohtml"))
+	tpl := makeTemplate()
+	tpl.ParseFiles("./templates/login.gohtml")
 
-	err := tpl.ExecuteTemplate(w, "login.gohtml", nil)
+	err := tpl.ExecuteTemplate(w, "base.gohtml", nil)
 	if err != nil {
 		log.Fatalln(err)
 	}
