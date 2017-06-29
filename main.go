@@ -35,10 +35,11 @@ func main() {
 }
 
 func sendIndex(w http.ResponseWriter, r *http.Request) {
-	tpl := template.Must(template.ParseGlob("./templates/*.gohtml"))
+	tpl := makeTemplate()
+	tpl.ParseFiles("./templates/index.gohtml")
 	value := utility.GetFlash(w, r, "flash", "/")
 
-	err := tpl.ExecuteTemplate(w, "index.gohtml", value)
+	err := tpl.ExecuteTemplate(w, "base.gohtml", value)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -85,4 +86,10 @@ func sendSignup(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalln(err)
 	}
+}
+
+func makeTemplate() *template.Template {
+	tpl := template.Must(template.ParseFiles("./templates/base.gohtml",
+		"./templates/footer.gohtml", "./templates/navbar.gohtml"))
+	return tpl
 }
