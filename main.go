@@ -21,7 +21,7 @@ func main() {
 
 	http.HandleFunc("/", sendIndex)
 	http.HandleFunc("/users", sendUsers)
-	http.HandleFunc("/login", sendLogin)
+	http.HandleFunc("/login", handlers.LoginHandler)
 	http.HandleFunc("/signup/create", handlers.CreateUserHandler)
 	http.HandleFunc("/signup", handlers.SignupHandler)
 	http.Handle("/stylesheets/", http.StripPrefix("/stylesheets/", http.FileServer(http.Dir("stylesheets"))))
