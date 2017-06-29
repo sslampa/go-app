@@ -16,8 +16,8 @@ type Page struct {
 	Flash string
 }
 
-// SignupHandler signs up a new user
-func SignupHandler(w http.ResponseWriter, r *http.Request) {
+// CreateUserHandler signs up a new user
+func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	u := models.User{}
 	u.Username = r.FormValue("username")
 	u.Password = r.FormValue("password")
@@ -54,4 +54,15 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	flashMessage := fmt.Sprintf("You signed up, %v!", u.Username)
 	utility.SetFlash(w, "flash", flashMessage, "/")
 	http.Redirect(w, r, "/", 301)
+}
+
+// SignupHandler shows sign up page
+func SignupHandler(w http.ResponseWriter, r *http.Request) {
+	tpl := template.Must(template.ParseFiles("./templates/base.gohtml", "./templates/signup.gohtml", "./templates/navbar.gohtml", "./templates/footer.gohtml"))
+	value := utility.GetFlash(w, r, "flash", "/signup")
+
+	err := tpl.ExecuteTemplate(w, "base.gohtml", value)
+	if err != nil {
+		log.Fatalln(err)
+	}
 }

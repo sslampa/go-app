@@ -23,8 +23,8 @@ func main() {
 	http.HandleFunc("/", sendIndex)
 	http.HandleFunc("/users", sendUsers)
 	http.HandleFunc("/login", sendLogin)
-	http.HandleFunc("/signup/create", handlers.SignupHandler)
-	http.HandleFunc("/signup", sendSignup)
+	http.HandleFunc("/signup/create", handlers.CreateUserHandler)
+	http.HandleFunc("/signup", handlers.SignupHandler)
 	http.Handle("/stylesheets/", http.StripPrefix("/stylesheets/", http.FileServer(http.Dir("stylesheets"))))
 
 	err := http.ListenAndServe(":"+*port, nil)
@@ -65,16 +65,6 @@ func sendLogin(w http.ResponseWriter, r *http.Request) {
 	tpl.ParseFiles("./templates/login.gohtml")
 
 	err := tpl.ExecuteTemplate(w, "base.gohtml", nil)
-	if err != nil {
-		log.Fatalln(err)
-	}
-}
-
-func sendSignup(w http.ResponseWriter, r *http.Request) {
-	tpl := template.Must(template.ParseFiles("./templates/base.gohtml", "./templates/signup.gohtml", "./templates/navbar.gohtml", "./templates/footer.gohtml"))
-	value := utility.GetFlash(w, r, "flash", "/signup")
-
-	err := tpl.ExecuteTemplate(w, "base.gohtml", value)
 	if err != nil {
 		log.Fatalln(err)
 	}
