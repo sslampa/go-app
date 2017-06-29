@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="/stylesheets/main.css">
+    <link rel="stylesheet" href="/stylesheets/navigation.css">
+    {{template "styles"}}
+  </head>
+  <body>
+    {{template "navbar"}}
+
+    <div class="container">
+      {{template "content" .}}
+    </div>
+
+    {{template "footer"}}
+  </body>
+</html>

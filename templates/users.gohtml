@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-    {{template "navbar"}}
-    {{range .}}
-      <p>{{.FirstName}} {{.LastName}}</p>
-    {{end}}
-    {{template "footer"}}
-  </body>
-</html>
+{{define "content"}}
+  {{range .}}
+    <p>{{.FirstName}} {{.LastName}}</p>
+  {{end}}
+{{end}}
+
+{{define "styles"}}
+{{end}}
