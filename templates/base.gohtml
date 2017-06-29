@@ -4,12 +4,16 @@
     <meta charset="utf-8">
     <title></title>
     <link rel="stylesheet" href="/stylesheets/main.css">
-    <link rel="stylesheet" href="/stylesheets/navbar.css">
+    <link rel="stylesheet" href="/stylesheets/navigation.css">
+    {{template "styles"}}
   </head>
   <body>
     {{template "navbar"}}
-    {{.}}
-    <h1>Hello World</h1>
+
+    <div class="container">
+      {{template "content" .}}
+    </div>
+
     {{template "footer"}}
   </body>
 </html>

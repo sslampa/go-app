@@ -78,10 +78,10 @@ func sendLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func sendSignup(w http.ResponseWriter, r *http.Request) {
-	tpl := template.Must(template.ParseGlob("./templates/*.gohtml"))
+	tpl := template.Must(template.ParseFiles("./templates/base.gohtml", "./templates/signup.gohtml", "./templates/navbar.gohtml", "./templates/footer.gohtml"))
 	value := utility.GetFlash(w, r, "flash", "/signup")
 
-	err := tpl.ExecuteTemplate(w, "signup.gohtml", value)
+	err := tpl.ExecuteTemplate(w, "base.gohtml", value)
 	if err != nil {
 		log.Fatalln(err)
 	}
