@@ -34,6 +34,16 @@ func CreateUserSession(us *UserSession) {
 	}
 }
 
+// DeleteUserSession deletes a session
+func DeleteUserSession(sid string) {
+	userSessionDelete := "DELETE FROM user_sessions WHERE session_id = $1"
+
+	_, err := DB.Exec(userSessionDelete, sid)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 // UserLoggedIn checks for session and gets user
 func UserLoggedIn(r *http.Request) User {
 	u := User{}
