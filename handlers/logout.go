@@ -1,18 +1,9 @@
 package handlers
 
-import (
-	"fmt"
-	"log"
-	"net/http"
-)
+import "net/http"
 
+// LogoutHandler does logging out
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
-	session, err := r.Cookie("session")
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(session)
-
 	nc := &http.Cookie{Name: "session", MaxAge: -86400, Path: "/"}
 	http.SetCookie(w, nc)
 

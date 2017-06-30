@@ -44,6 +44,12 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
+	user, err := models.FindUser(u.Username, "username")
+	if err != nil {
+		log.Fatal(err)
+	}
+	StartSession(w, user.ID)
+
 	flashMessage := fmt.Sprintf("You signed up, %v!", u.Username)
 	utility.SetFlash(w, "flash", flashMessage, "/")
 	http.Redirect(w, r, "/", 302)

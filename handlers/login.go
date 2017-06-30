@@ -51,14 +51,19 @@ func CreateLoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	StartSession(w, u.ID)
+	utility.SetFlash(w, "flash", "You have succesfully logged in", "/")
+	http.Redirect(w, r, "/", 302)
+}
+
+// StartSession starts a session for log in
+func StartSession(w http.ResponseWriter, id int) {
 	sID := uuid.NewV4()
 	var us models.UserSession
 	us.SessionID = sID.String()
-	us.UserID = u.ID
+	us.UserID = id
 	models.CreateUserSession(&us)
 
 	c := &http.Cookie{Name: "session", Value: sID.String(), MaxAge: 86400, Path: "/"}
 	http.SetCookie(w, c)
-	utility.SetFlash(w, "flash", "You have succesfully logged in", "/")
-	http.Redirect(w, r, "/", 302)
 }
