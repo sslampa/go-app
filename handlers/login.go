@@ -60,5 +60,5 @@ func CreateLoginHandler(w http.ResponseWriter, r *http.Request) {
 	c := &http.Cookie{Name: "session", Value: sID.String(), MaxAge: 86400, Path: "/"}
 	http.SetCookie(w, c)
 	utility.SetFlash(w, "flash", "You have succesfully logged in", "/")
-	http.Redirect(w, r, "/", 301)
+	http.Redirect(w, r, "/", 302)
 }

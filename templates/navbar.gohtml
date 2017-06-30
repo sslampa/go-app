@@ -4,6 +4,7 @@
     <a href="/users">Users</a>
     {{if (ne .User.ID 0)}}
       <span>Hello, {{$.User.FirstName}}!</span>
+      <a href="/logout">Logout</a>
     {{else}}
       <a href="/login">Log In</a>
       <a href="/signup">Sign Up</a>
