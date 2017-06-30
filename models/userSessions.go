@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql"
 	"log"
 	"net/http"
 )
@@ -34,25 +35,18 @@ func CreateUserSession(us *UserSession) {
 }
 
 // UserLoggedIn checks for session and gets user
-func UserLoggedIn(r *http.Request) []User {
+func UserLoggedIn(r *http.Request) User {
+	u := User{}
 	c, err := r.Cookie("session")
 	if err != nil {
-		log.Fatal(err)
-	}
-	query := "SELECT * FROM users WHERE id = (SELECT user_id FROM user_sessions WHERE session_id = $1)"
-	rows, err := DB.Query(query, c.Value)
-	if err != nil {
-		log.Fatal(err)
+		return u
 	}
 
-	users := make([]User, 0)
-	for rows.Next() {
-		u := User{}
-		err = rows.Scan(&u.ID, &u.Username, &u.Password, &u.FirstName, &u.LastName)
-		if err != nil {
-			return users
-		}
-		users = append(users, u)
+	query := "SELECT * FROM users WHERE id = (SELECT user_id FROM user_sessions WHERE session_id = $1)"
+	row := DB.QueryRow(query, c.Value)
+	err = row.Scan(&u.ID, &u.Username, &u.Password, &u.FirstName, &u.LastName)
+	if err == sql.ErrNoRows {
+		return User{}
 	}
-	return users
+	return u
 }

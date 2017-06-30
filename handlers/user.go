@@ -21,7 +21,7 @@ func UsersHandler(w http.ResponseWriter, r *http.Request) {
 	tpl := utility.MakeTemplate()
 	tpl.ParseFiles("./templates/users.gohtml")
 
-	p.Users = loggedIn
+	p.User = loggedIn
 	p.UsersData = users
 
 	err = tpl.ExecuteTemplate(w, "base.gohtml", p)

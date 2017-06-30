@@ -2,7 +2,11 @@
   <nav>
     <a href="/">Home</a>
     <a href="/users">Users</a>
-    <a href="/login">Log In</a>
-    <a href="/signup">Sign Up</a>
+    {{if (ne .User.ID 0)}}
+      <span>Hello, {{$.User.FirstName}}!</span>
+    {{else}}
+      <a href="/login">Log In</a>
+      <a href="/signup">Sign Up</a>
+    {{end}}
   </nav>
 {{end}}

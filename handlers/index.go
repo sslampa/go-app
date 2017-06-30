@@ -11,7 +11,7 @@ import (
 // Page holds data to send to view
 type Page struct {
 	Message   string
-	Users     []models.User
+	User      models.User
 	UsersData []models.User
 }
 
@@ -25,7 +25,8 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	value := utility.GetFlash(w, r, "flash", "/")
 
 	p.Message = value
-	p.Users = loggedIn
+	p.User = loggedIn
+
 	err := tpl.ExecuteTemplate(w, "base.gohtml", p)
 	if err != nil {
 		log.Fatalln(err)

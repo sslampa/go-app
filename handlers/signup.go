@@ -59,7 +59,7 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	value := utility.GetFlash(w, r, "flash", "/signup")
 
 	p.Message = value
-	p.Users = loggedIn
+	p.User = loggedIn
 
 	err := tpl.ExecuteTemplate(w, "base.gohtml", p)
 	if err != nil {

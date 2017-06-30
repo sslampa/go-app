@@ -21,7 +21,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	value := utility.GetFlash(w, r, "flash", "/login")
 
 	p.Message = value
-	p.Users = loggedIn
+	p.User = loggedIn
 
 	err := tpl.ExecuteTemplate(w, "base.gohtml", p)
 	if err != nil {
