@@ -1,6 +1,9 @@
 package models
 
-import "log"
+import (
+	"log"
+	"net/http"
+)
 
 // UserSession holds the sessions
 type UserSession struct {
@@ -28,4 +31,28 @@ func CreateUserSession(us *UserSession) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+// UserLoggedIn checks for session and gets user
+func UserLoggedIn(r *http.Request) []User {
+	c, err := r.Cookie("session")
+	if err != nil {
+		log.Fatal(err)
+	}
+	query := "SELECT * FROM users WHERE id = (SELECT user_id FROM user_sessions WHERE session_id = $1)"
+	rows, err := DB.Query(query, c.Value)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	users := make([]User, 0)
+	for rows.Next() {
+		u := User{}
+		err = rows.Scan(&u.ID, &u.Username, &u.Password, &u.FirstName, &u.LastName)
+		if err != nil {
+			return users
+		}
+		users = append(users, u)
+	}
+	return users
 }

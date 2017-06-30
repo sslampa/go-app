@@ -2,19 +2,12 @@ package handlers
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 
 	"github.com/sslampa/go-app/models"
 	"github.com/sslampa/go-app/utility"
 )
-
-// Page Holds what pages should look like
-type Page struct {
-	Body  *template.Template
-	Flash string
-}
 
 // CreateUserHandler signs up a new user
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
