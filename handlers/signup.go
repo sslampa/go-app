@@ -51,11 +51,17 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 
 // SignupHandler shows sign up page
 func SignupHandler(w http.ResponseWriter, r *http.Request) {
+	var p Page
+	loggedIn := models.UserLoggedIn(r)
+
 	tpl := utility.MakeTemplate()
 	tpl.ParseFiles("./templates/signup.gohtml")
 	value := utility.GetFlash(w, r, "flash", "/signup")
 
-	err := tpl.ExecuteTemplate(w, "base.gohtml", value)
+	p.Message = value
+	p.Users = loggedIn
+
+	err := tpl.ExecuteTemplate(w, "base.gohtml", p)
 	if err != nil {
 		log.Fatalln(err)
 	}

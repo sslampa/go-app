@@ -13,11 +13,17 @@ import (
 
 // LoginHandler shows log in page
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
+	var p Page
+	loggedIn := models.UserLoggedIn(r)
+
 	tpl := utility.MakeTemplate()
 	tpl.ParseFiles("./templates/login.gohtml")
 	value := utility.GetFlash(w, r, "flash", "/login")
 
-	err := tpl.ExecuteTemplate(w, "base.gohtml", value)
+	p.Message = value
+	p.Users = loggedIn
+
+	err := tpl.ExecuteTemplate(w, "base.gohtml", p)
 	if err != nil {
 		log.Fatal(err)
 	}

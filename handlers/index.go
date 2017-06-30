@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -11,15 +10,16 @@ import (
 
 // Page holds data to send to view
 type Page struct {
-	Message string
-	Users   []models.User
+	Message   string
+	Users     []models.User
+	UsersData []models.User
 }
 
 // IndexHandler shows index page
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	var p Page
 	loggedIn := models.UserLoggedIn(r)
-	fmt.Println(loggedIn)
+
 	tpl := utility.MakeTemplate()
 	tpl.ParseFiles("./templates/index.gohtml")
 	value := utility.GetFlash(w, r, "flash", "/")
