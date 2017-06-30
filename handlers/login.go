@@ -6,6 +6,7 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
+	uuid "github.com/satori/go.uuid"
 	"github.com/sslampa/go-app/models"
 	"github.com/sslampa/go-app/utility"
 )
@@ -44,7 +45,13 @@ func CreateLoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c := &http.Cookie{Name: "session", Value: u.Username, MaxAge: 86400, Path: "/"}
+	sID := uuid.NewV4()
+	var us models.UserSession
+	us.SessionID = sID.String()
+	us.UserID = u.ID
+	models.CreateUserSession(&us)
+
+	c := &http.Cookie{Name: "session", Value: sID.String(), MaxAge: 86400, Path: "/"}
 	http.SetCookie(w, c)
 	utility.SetFlash(w, "flash", "You have succesfully logged in", "/")
 	http.Redirect(w, r, "/", 301)
