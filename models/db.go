@@ -37,6 +37,7 @@ func init() {
 
 	fmt.Println("You connected to your database")
 	InitUsers()
+	InitUserSessions()
 }
 
 // Seed the db
