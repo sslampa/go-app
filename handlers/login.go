@@ -44,5 +44,6 @@ func CreateLoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	utility.SetFlash(w, "flash", "You have succesfully logged in", "/")
 	http.Redirect(w, r, "/", 301)
 }
