@@ -3,6 +3,8 @@ package models
 import (
 	"fmt"
 	"log"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 // User holds the values for a user of the site
@@ -32,8 +34,12 @@ func InitUsers() {
 // CreateUser adds a user into the Users db
 func CreateUser(u *User) (User, error) {
 	userInsert := "INSERT INTO users (username, password, first_name, last_name) VALUES ($1,$2,$3,$4)"
+	bs, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.MinCost)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	result, err := DB.Exec(userInsert, u.Username, u.Password, u.FirstName, u.LastName)
+	result, err := DB.Exec(userInsert, u.Username, bs, u.FirstName, u.LastName)
 	if err != nil {
 		log.Fatal(err)
 	}
