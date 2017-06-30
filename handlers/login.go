@@ -14,8 +14,9 @@ import (
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	tpl := utility.MakeTemplate()
 	tpl.ParseFiles("./templates/login.gohtml")
+	value := utility.GetFlash(w, r, "flash", "/login")
 
-	err := tpl.ExecuteTemplate(w, "base.gohtml", nil)
+	err := tpl.ExecuteTemplate(w, "base.gohtml", value)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -32,11 +33,13 @@ func CreateLoginHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	if !models.CheckUsername(&u) {
+		utility.SetFlash(w, "flash", "Username/Password do not match", "/login")
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
 	if err != nil {
+		utility.SetFlash(w, "flash", "Username/Password do not match", "/login")
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
