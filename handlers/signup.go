@@ -2,19 +2,12 @@ package handlers
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 
 	"github.com/sslampa/go-app/models"
 	"github.com/sslampa/go-app/utility"
 )
-
-// Page Holds what pages should look like
-type Page struct {
-	Body  *template.Template
-	Flash string
-}
 
 // CreateUserHandler signs up a new user
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
@@ -51,18 +44,30 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
+	user, err := models.FindUser(u.Username, "username")
+	if err != nil {
+		log.Fatal(err)
+	}
+	StartSession(w, user.ID)
+
 	flashMessage := fmt.Sprintf("You signed up, %v!", u.Username)
 	utility.SetFlash(w, "flash", flashMessage, "/")
-	http.Redirect(w, r, "/", 301)
+	http.Redirect(w, r, "/", 302)
 }
 
 // SignupHandler shows sign up page
 func SignupHandler(w http.ResponseWriter, r *http.Request) {
+	var p Page
+	loggedIn := models.UserLoggedIn(r)
+
 	tpl := utility.MakeTemplate()
 	tpl.ParseFiles("./templates/signup.gohtml")
 	value := utility.GetFlash(w, r, "flash", "/signup")
 
-	err := tpl.ExecuteTemplate(w, "base.gohtml", value)
+	p.Message = value
+	p.User = loggedIn
+
+	err := tpl.ExecuteTemplate(w, "base.gohtml", p)
 	if err != nil {
 		log.Fatalln(err)
 	}

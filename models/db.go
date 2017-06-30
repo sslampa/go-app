@@ -37,16 +37,18 @@ func init() {
 
 	fmt.Println("You connected to your database")
 	InitUsers()
+	InitUserSessions()
 }
 
 // Seed the db
 func Seed() {
-	dropQuery := `DROP TABLE users`
+	dropQuery := `DROP TABLE users, user_sessions`
 	_, err := DB.Exec(dropQuery)
 	if err != nil {
 		log.Fatal(err)
 	}
 	InitUsers()
+	InitUserSessions()
 	user1 := User{
 		Username:  "sslampa",
 		Password:  "123456",

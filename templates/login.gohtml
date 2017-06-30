@@ -1,7 +1,8 @@
 {{define "content"}}
-  <form action="login">
+  {{.Message}}
+  <form method="POST" action="/login/create">
     <input type="text" name="username" placeholder="Username">
-    <input type="text" name="password" placeholder="Password">
+    <input type="password" name="password" placeholder="Password">
     <input type="submit" value="Log In">
   </form>
   <span><a href="/signup">Sign Up</a></span>

@@ -10,6 +10,9 @@ import (
 
 // UsersHandler shows all users page
 func UsersHandler(w http.ResponseWriter, r *http.Request) {
+	var p Page
+	loggedIn := models.UserLoggedIn(r)
+
 	users, err := models.AllUsers()
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
@@ -18,7 +21,10 @@ func UsersHandler(w http.ResponseWriter, r *http.Request) {
 	tpl := utility.MakeTemplate()
 	tpl.ParseFiles("./templates/users.gohtml")
 
-	err = tpl.ExecuteTemplate(w, "base.gohtml", users)
+	p.User = loggedIn
+	p.UsersData = users
+
+	err = tpl.ExecuteTemplate(w, "base.gohtml", p)
 	if err != nil {
 		log.Fatal(err)
 	}
