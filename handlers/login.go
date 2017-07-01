@@ -15,6 +15,10 @@ import (
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	var p Page
 	loggedIn := models.UserLoggedIn(r)
+	if loggedIn != (models.User{}) {
+		http.Redirect(w, r, "/", 302)
+		return
+	}
 
 	tpl := utility.MakeTemplate()
 	tpl.ParseFiles("./templates/login.gohtml")
