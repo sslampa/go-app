@@ -16,7 +16,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	var p Page
 	loggedIn := models.UserLoggedIn(r)
 	if loggedIn != (models.User{}) {
-		http.Redirect(w, r, "/", 302)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
@@ -57,7 +57,7 @@ func CreateLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	StartSession(w, u.ID)
 	utility.SetFlash(w, "flash", "You have succesfully logged in", "/")
-	http.Redirect(w, r, "/", 302)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 // StartSession starts a session for log in
