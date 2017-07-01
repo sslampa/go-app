@@ -17,6 +17,6 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, nc)
 
 	models.DeleteUserSession(c.Value)
-	http.Redirect(w, r, "/", 302)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 	return
 }

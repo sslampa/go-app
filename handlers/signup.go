@@ -52,7 +52,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	flashMessage := fmt.Sprintf("You signed up, %v!", u.Username)
 	utility.SetFlash(w, "flash", flashMessage, "/")
-	http.Redirect(w, r, "/", 302)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 // SignupHandler shows sign up page
