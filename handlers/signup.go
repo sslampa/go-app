@@ -9,8 +9,20 @@ import (
 	"github.com/sslampa/go-app/utility"
 )
 
-// CreateUserHandler signs up a new user
-func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
+// SignupHandler routes to correct signup function
+func SignupHandler(w http.ResponseWriter, r *http.Request) {
+	method := r.Method
+
+	switch method {
+	case "GET":
+		SignupShowHandler(w, r)
+	case "POST":
+		SignupCreateHandler(w, r)
+	}
+}
+
+// SignupCreateHandler signs up a new user
+func SignupCreateHandler(w http.ResponseWriter, r *http.Request) {
 	u := models.User{}
 	u.Username = r.FormValue("username")
 	u.Password = r.FormValue("password")
@@ -55,8 +67,8 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
-// SignupHandler shows sign up page
-func SignupHandler(w http.ResponseWriter, r *http.Request) {
+// SignupShowHandler shows sign up page
+func SignupShowHandler(w http.ResponseWriter, r *http.Request) {
 	var p Page
 	loggedIn := models.UserLoggedIn(r)
 
