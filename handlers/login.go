@@ -11,8 +11,20 @@ import (
 	"github.com/sslampa/go-app/utility"
 )
 
-// LoginHandler shows log in page
+// LoginHandler sends to correct route
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
+	method := r.Method
+
+	switch method {
+	case "GET":
+		LoginShowHandler(w, r)
+	case "POST":
+		LoginCreateHandler(w, r)
+	}
+}
+
+// LoginShowHandler shows log in page
+func LoginShowHandler(w http.ResponseWriter, r *http.Request) {
 	var p Page
 	loggedIn := models.UserLoggedIn(r)
 	if loggedIn != (models.User{}) {
@@ -33,8 +45,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// CreateLoginHandler creates stuff
-func CreateLoginHandler(w http.ResponseWriter, r *http.Request) {
+// LoginCreateHandler creates stuff
+func LoginCreateHandler(w http.ResponseWriter, r *http.Request) {
 	var u models.User
 	username := r.FormValue("username")
 	password := r.FormValue("password")
