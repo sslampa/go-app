@@ -61,8 +61,15 @@ func Seed() {
 		FirstName: "Toma",
 		LastName:  "Nistor",
 	}
+	user3 := User{
+		Username:  "suzmas",
+		Password:  "123456",
+		FirstName: "Suzan",
+		LastName:  "Sucro",
+	}
 	_, _ = CreateUser(&user1)
 	_, _ = CreateUser(&user2)
+	_, _ = CreateUser(&user3)
 
 	fmt.Println("Seed file ran")
 }
