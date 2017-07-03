@@ -19,6 +19,7 @@ func main() {
 	log.Printf("Serving on HTTP port: %s\n", *port)
 
 	http.HandleFunc("/", handlers.IndexHandler)
+	http.HandleFunc("/user/", handlers.UserShowHandler)
 	http.HandleFunc("/users", handlers.UsersHandler)
 	http.HandleFunc("/login", handlers.LoginHandler)
 	http.HandleFunc("/logout", handlers.LogoutHandler)

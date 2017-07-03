@@ -3,30 +3,26 @@ package handlers
 import (
 	"log"
 	"net/http"
-	"regexp"
 
 	"github.com/sslampa/go-app/models"
 	"github.com/sslampa/go-app/utility"
 )
 
-// UserShowHandler does things
-func UserShowHandler(w http.ResponseWriter, r *http.Request) {
+// UsersHandler shows all users page
+func UsersHandler(w http.ResponseWriter, r *http.Request) {
 	var p Page
 	loggedIn := models.UserLoggedIn(r)
 
-	path := r.URL.Path
-	re := regexp.MustCompile("^.*/user/([0-9]+)")
-	match := re.FindStringSubmatch(path)
-	u, err := models.FindUser(match[1], "id")
+	users, err := models.AllUsers()
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+		return
 	}
-
 	tpl := utility.MakeTemplate()
-	tpl.ParseFiles("./templates/user.gohtml")
+	tpl.ParseFiles("./templates/users.gohtml")
 
 	p.User = loggedIn
-	p.UserData = u
+	p.UsersData = users
 
 	err = tpl.ExecuteTemplate(w, "base.gohtml", p)
 	if err != nil {
