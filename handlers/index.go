@@ -13,6 +13,7 @@ type Page struct {
 	Message   string
 	User      models.User
 	UsersData []models.User
+	UserData  models.User
 }
 
 // IndexHandler shows index page

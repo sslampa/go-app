@@ -1,6 +1,6 @@
 {{define "content"}}
   {{range .UsersData}}
-    <p>{{.FirstName}} {{.LastName}}</p>
+    <a href="/user/{{.ID}}">{{.Username}}</p>
   {{end}}
 {{end}}
 
